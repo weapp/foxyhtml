@@ -4,7 +4,8 @@ from collections import namedtuple
 from UserList import UserList
 from foxycss import FoxyCss, CollectionCSS, CssSelector
 
-#(tag and re.search('<([a-zA-Z]+)', tag).group(1)) or (closetag and re.search('</([a-zA-Z]+)', closetag).group(1) or '').lower() )
+#(tag and re.search('<([a-zA-Z]+)', tag).group(1)) or
+#(closetag and re.search('</([a-zA-Z]+)', closetag).group(1) or '').lower() )
 
 re_html = re.compile("""(</[a-zA-Z]+[^>]*>)                 #closetag
                         |(<[a-zA-Z]+(?:[^/>]|/[^>])*/>)      #singletag
@@ -21,73 +22,85 @@ re_tag_cls = re.compile("""class=(("[^"]*")|('[^']*')|[^\s>]+)""", re.DOTALL)
 re_closetag = re.compile("</([a-zA-Z]+[0-9]*)", re.DOTALL)
 re_spaces = re.compile("\s+")
 
+
+def re_attr(name):
+    expr = """%s=(("[^"]*")|('[^']*')|[^\s>]+)"""
+    return re.compile(expr % name, re.DOTALL | re.IGNORECASE)
+
+
 def get_attr(name):
     if name not in get_attr.regexps:
-        get_attr.regexps[name] = re.compile("""%s=(("[^"]*")|('[^']*')|[^\s>]+)""" % name, re.DOTALL | re.IGNORECASE)
+        get_attr.regexps[name] = re_attr(name)
     return get_attr.regexps[name]
 get_attr.regexps = {}
 
-TypeNode = namedtuple('TypeNode', 'tag singletag closetag notag comment other')._make('tag singletag closetag notag comment other'.split(' '))
+Type_node_attrs = 'tag singletag closetag notag comment other'
+TypeNode = namedtuple('TypeNode', Type_node_attrs)\
+    ._make(Type_node_attrs.split(' '))
 _Node = namedtuple('Node', 'type content extra')
+
 
 class CollectionFoxyHtml(UserList, CollectionCSS):
     def attr(self, attr):
-        return CollectionFoxyHtml([value.attr(attr) for value in self if value])
+        return CollectionFoxyHtml([node.attr(attr) for node in self if node])
 
     def search(self, *args, **kws):
-        return CollectionFoxyHtml([t for elem in self for t in elem.search(*args, **kws)])
-    
+        return CollectionFoxyHtml([t for node in self
+                                   for t in node.search(*args, **kws)])
+
     def texts(self):
-        return [elem.texts() for elem in self]
-    
+        return [node.texts() for node in self]
+
     def joinedtexts(self):
-        return [elem.joinedtexts() for elem in self if elem]
-    
+        return [node.joinedtexts() for node in self if node]
+
     def select(self, css):
-        t = CollectionFoxyHtml([elem.select(css) for elem in self])
+        t = CollectionFoxyHtml([node.select(css) for node in self])
         return t
-        if len(self)==1:
+        if len(self) == 1:
             return t[0]
         else:
             return t
-    
+
+
 class Node(_Node):
     def attr(self, attr):
         tag = self.content
         value = get_attr(attr).search(tag)
         value = value and value.group(1).strip('"').strip("'")
         return value
-    
+
     def istag(self):
         return self.type in (TypeNode.tag, TypeNode.singletag)
-        
+
     def isclosetag(self):
         return self.type in (TypeNode.closetag, TypeNode.singletag)
-    
+
     def tagname(self):
         if self.istag() or self.isclosetag():
             return self.extra[0]
-    
+
     def id(self):
         if self.istag():
             return self.extra[1]
-            
+
     def clean(self, translate_table={}):
-      if self.type in ("closetag", "tag"):
+        if self.type in ("closetag", "tag"):
         #print self.extra[0], self.extra
-        name = self.extra[0]
-        slash1 = "" if self.istag() else "/"
-        slash2 = " /" if self.istag() and self.isclosetag() else ""
-        src = self.attr("src")
-        if src:
-          slash2 = " src=\"%s\"%s" % (src, slash2)
-        href = self.attr("href")
-        if href:
-          slash2 = " href=\"%s\"%s" % (href, slash2)
-        name = translate_table.get(name, name)
-        content = "<%s%s%s>" % (slash1, name, slash2)
-        self = type(self)(self.type, content, (name, None, []))
-      return self
+            name = self.extra[0]
+            slash1 = "" if self.istag() else "/"
+            slash2 = " /" if self.istag() and self.isclosetag() else ""
+            src = self.attr("src")
+            if src:
+                slash2 = " src=\"%s\"%s" % (src, slash2)
+            href = self.attr("href")
+            if href:
+                slash2 = " href=\"%s\"%s" % (href, slash2)
+            name = translate_table.get(name, name)
+            content = "<%s%s%s>" % (slash1, name, slash2)
+            self = type(self)(self.type, content, (name, None, []))
+        return self
+
 
 def _parseNode(closetag, singletag, tag, notag, comment, other):
     if tag:
@@ -115,7 +128,6 @@ def _parseNode(closetag, singletag, tag, notag, comment, other):
         return Node(TypeNode.notag, other, None)
 
 
-
 class FoxyHtml(list):
     def __init__(self, html=None):
         if html is None:
@@ -126,7 +138,8 @@ class FoxyHtml(list):
             else:
                 if 'utf-8' in html:
                     html = unicode(html, 'utf-8')
-            list.__init__(self, [_parseNode(*node) for node in re_html.findall(html)])
+            list.__init__(
+                self, [_parseNode(*node) for node in re_html.findall(html)])
         else:
             list.__init__(self, list(html))
 
@@ -144,7 +157,7 @@ class FoxyHtml(list):
                 elif m == "last":
                     r = r[-1] if r else None
         return r
-        
+
     def select(self, item):
         sel = CssSelector(item)
         return self._select(sel)
@@ -154,7 +167,8 @@ class FoxyHtml(list):
         for c in css:
             modif = []
             kws = {}
-            for arg in re.findall("([a-zA-Z0-9]+)|\.([a-zA-Z0-9]+)|\#([a-zA-Z0-9]+)|\:([a-zA-Z0-9]+)", c):
+            for arg in re.findall("([a-zA-Z0-9]+)|" +
+                "\.([a-zA-Z0-9]+)|\#([a-zA-Z0-9]+)|\:([a-zA-Z0-9]+)", c):
                 if arg[0]:
                     kws["tagname"] = arg[0]
                 elif arg[1]:
@@ -177,8 +191,9 @@ class FoxyHtml(list):
         '''
 
     def clean(self, translate_table={}):
-      return FoxyHtml((process(node, translate_table) for node in html))
-    
+        pass
+        #return FoxyHtml((process(node, translate_table) for node in self))
+
     def foxycss(self, css):
         return FoxyCss(css).apply(self)
 
@@ -187,38 +202,47 @@ class FoxyHtml(list):
         tagname = tagname and tagname.lower()
         y = 0
         r = []
-        if p: print "***", tagname, id, cls, fun
+        if p:
+            print "***", tagname, id, cls, fun
         ctagname = None
-        for node in self:#[1:-1]:
-            if p: print node
-            if p: print "...*...", y, node.istag() ,\
-                node.istag()  and (not tagname or node.extra[0] == tagname) ,\
-                node.istag()  and (not id or node.extra[1] == id) ,\
-                node.istag()  and (not cls or cls in node.extra[2])
-                
-            #el orden de los if es importante para que devuelva el primer y el ultimo nodo
+        for node in self:  # [1:-1]:
+            if p:
+                print node
+            if p:
+                istag = node.istag()
+                print "...*...", y, istag,\
+                    istag and (not tagname or node.extra[0] == tagname),\
+                    istag and (not id or node.extra[1] == id),\
+                    istag and (not cls or cls in node.extra[2])
+
+            # El orden de los if es importante para que devuelva el
+            # primer y el ultimo nodo
             if not y and node.istag() and \
                 (not tagname or node.extra[0] == tagname) and \
                 (not id or node.extra[1] == id) and \
                 (not cls or cls in node.extra[2]) and \
-                (not fun or fun(node)):
-                # guardamos porque pudiera ser que el parametro tagname fuera None
+                    (not fun or fun(node)):
+                # Guardamos porque pudiera ser que el parametro
+                # tagname fuera None
                 ctagname = node.extra[0]
                 y += 1
-                if p: print "++level", tagname
+                if p:
+                    print "++level", tagname
             elif y and node.istag() and node.extra[0] == ctagname:
                 y += 1
-                if p: print "++level"
-            
-            if y>0:
+                if p:
+                    print "++level"
+
+            if y > 0:
                 r.append(node)
-            
-            
-            if p: print "--level?", y, node.isclosetag(), node.extra
-            if y>0 and node.isclosetag() and node.extra[0] == ctagname:
+
+            if p:
+                print "--level?", y, node.isclosetag(), node.extra
+            if y > 0 and node.isclosetag() and node.extra[0] == ctagname:
                 y -= 1
-                if p: print "--level"
-            
+                if p:
+                    print "--level"
+
             if r and not y:
                 yield FoxyHtml(r)
                 r = []
@@ -229,38 +253,40 @@ class FoxyHtml(list):
 
     def rebuild(self):
         return "".join(node.content for node in self)
-        
+
     def texts(self):
         return [node.content for node in self if node.type == TypeNode.notag]
 
     def joinedtexts(self):
-        text = "".join(self.texts()).replace("\r",' ').replace("\n",' ').strip() 
-        return re_spaces.sub( ' ', text)
-    
+        text = "".join(
+            self.texts()).replace("\r", ' ').replace("\n", ' ').strip()
+        return re_spaces.sub(' ', text)
+
     def __repr__(self):
         return repr(self.rebuild())
-        
+
     def attr(self, name):
         return self[0].attr(name)
 
     def id(self):
         return self[0].id()
 
-    
+
 def main(html):
     import urllib2
     from pprint import pprint
     html = urllib2.urlopen("http://www.thetimes.co.uk").read()
     parsed = FoxyHtml(html)
-    
+
     print "Way 1:"
     results = parsed.search(cls="nib-inner")
     for result in results:
-        pprint([result.joinedtexts() for result in result.search(tagname="li")])
-    
+        pprint(
+            [result.joinedtexts() for result in result.search(tagname="li")])
+
     print "Way 2:"
-    pprint([result.joinedtexts() for result in parsed.foxycss(".nib-inner li")])
-    
+    pprint(
+        [result.joinedtexts() for result in parsed.foxycss(".nib-inner li")])
 
 
 if __name__ == "__main__":
