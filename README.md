@@ -44,4 +44,23 @@ pprint([{
         for brick in bricks.search(cls="brick-sixth")
         for titles in brick.search(cls="f-hc").texts()
         ])
+
+print
+print "Example4"
+bricks = parsed.search(cls="brick-arts")
+pprint(bricks.search(tagname="img").attr("src"))
+print
+
+print
+print "Example5"
+brick = bricks.search(cls="brick-sixth")[0]
+
+print brick
+print
+
+print brick.rebuild()
+print
+
+print brick.clean().rebuild()
+print
 ```

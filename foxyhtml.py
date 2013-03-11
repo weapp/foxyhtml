@@ -8,7 +8,7 @@ from foxycss import FoxyCss, CollectionCSS, CssSelector
 #(closetag and re.search('</([a-zA-Z]+)', closetag).group(1) or '').lower() )
 
 re_html = re.compile("""(</[a-zA-Z]+[^>]*>)                 #closetag
-                        |(<[a-zA-Z]+(?:[^/>]|/[^>])*/>)      #singletag
+                        |(<[a-zA-Z]+(?:[^/>]|/[^>])*/>)     #singletag
                         |(<[a-zA-Z]+[^>]*>)                 #tag
                         |([^<]+)                            #notag
                         |(<![^>]*>)                         #comment
@@ -21,6 +21,12 @@ re_tag_id = re.compile("""id=(("[^"]*")|('[^']*')|[^\s>]+)""", re.DOTALL)
 re_tag_cls = re.compile("""class=(("[^"]*")|('[^']*')|[^\s>]+)""", re.DOTALL)
 re_closetag = re.compile("</([a-zA-Z]+[0-9]*)", re.DOTALL)
 re_spaces = re.compile("\s+")
+
+singles = ['meta', 'img', 'link', 'input', 'area', 'base', 'col', 'br', 'hr']
+allow = ['alt', 'src', 'href', 'title']
+inlineTags = ['a', 'abbr', 'acronym', 'b', 'br', 'code', 'em', 'font', 'i',
+              'img', 'ins', 'kbd', 'map', 'samp', 'small', 'span', 'strong',
+              'sub', 'sup', 'textarea']
 
 
 def re_attr(name):
@@ -42,7 +48,7 @@ _Node = namedtuple('Node', 'type content extra')
 
 class CollectionFoxyHtml(UserList, CollectionCSS):
     def attr(self, attr):
-        return CollectionFoxyHtml([node.attr(attr) for node in self if node])
+        return [node.attr(attr) for node in self if node]
 
     def search(self, *args, **kws):
         return CollectionFoxyHtml([t for node in self
@@ -84,18 +90,16 @@ class Node(_Node):
         if self.istag():
             return self.extra[1]
 
-    def clean(self, translate_table={}):
-        if self.type in ("closetag", "tag"):
+    def clean(self, translate_table={}, allow=allow):
+        if self.type in ("closetag", "tag", "singletag"):
         #print self.extra[0], self.extra
-            name = self.extra[0]
+            name = self.extra[0].lower()
             slash1 = "" if self.istag() else "/"
-            slash2 = " /" if self.istag() and self.isclosetag() else ""
-            src = self.attr("src")
-            if src:
-                slash2 = " src=\"%s\"%s" % (src, slash2)
-            href = self.attr("href")
-            if href:
-                slash2 = " href=\"%s\"%s" % (href, slash2)
+            slash2 = "/" if self.istag() and self.isclosetag() else ""
+            for attr_name in allow:
+                attr = self.attr(attr_name)
+                if attr:
+                    slash2 = " %s=\"%s\"%s" % (attr_name, attr, slash2)
             name = translate_table.get(name, name)
             content = "<%s%s%s>" % (slash1, name, slash2)
             self = type(self)(self.type, content, (name, None, []))
@@ -109,7 +113,10 @@ def _parseNode(closetag, singletag, tag, notag, comment, other):
         id = id and id.group(1).strip('"').strip("'")
         cls = re_tag_cls.search(tag)
         cls = cls and cls.group(1).strip('"').strip("'").split() or []
-        return Node(TypeNode.tag, tag, (tagname, id, cls))
+        if tagname in singles:
+            return Node(TypeNode.singletag, tag, (tagname, id, cls))
+        else:
+            return Node(TypeNode.tag, tag, (tagname, id, cls))
     elif singletag:
         tagname = re_tag.search(singletag).group(1)
         id = re_tag_id.search(singletag)
@@ -190,9 +197,8 @@ class FoxyHtml(list):
         return r
         '''
 
-    def clean(self, translate_table={}):
-        pass
-        #return FoxyHtml((process(node, translate_table) for node in self))
+    def clean(self, translate_table={}, allow=allow):
+        return FoxyHtml(node.clean(translate_table, allow) for node in self)
 
     def foxycss(self, css):
         return FoxyCss(css).apply(self)
@@ -311,6 +317,26 @@ def main():
             for brick in bricks.search(cls="brick-sixth")
             for titles in brick.search(cls="f-hc").texts()
             ])
+
+    print
+    print "Example4"
+    bricks = parsed.search(cls="brick-arts")
+    pprint(bricks.search(tagname="img").attr("src"))
+    print
+
+    print
+    print "Example5"
+    brick = bricks.search(cls="brick-sixth")[0]
+
+    print brick
+    print
+
+    print brick.rebuild()
+    print
+
+    print brick.clean().rebuild()
+    print
+
 
 if __name__ == "__main__":
     main()
