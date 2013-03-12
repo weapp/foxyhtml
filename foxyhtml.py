@@ -147,6 +147,8 @@ class FoxyHtml(list):
                     html = unicode(html, 'utf-8')
             list.__init__(
                 self, [_parseNode(*node) for node in re_html.findall(html)])
+        elif hasattr(html, 'read'):
+            FoxyHtml.__init__(self, html.read())
         else:
             list.__init__(self, list(html))
 
@@ -281,7 +283,7 @@ class FoxyHtml(list):
 def main():
     import urllib2
     from pprint import pprint
-    html = urllib2.urlopen("http://www.thetimes.co.uk").read()
+    html = urllib2.urlopen("http://www.thetimes.co.uk")
     parsed = FoxyHtml(html)
 
     print
