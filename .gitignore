@@ -27,6 +27,7 @@ pip-log.txt
 .mr.developer.cfg
 
 CLAUDE.md
+.claude/
 
 # Virtual environments
 venv/
@@ -45,3 +46,9 @@ build/
 
 # Pytest
 .pytest_cache/
+
+# MkDocs build output
+site/
+
+# Benchmark fixtures descargados (usar download_fixtures.py para regenerarlos)
+benchmarks/fixtures/wikipedia_actor.html

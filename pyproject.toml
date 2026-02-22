@@ -30,6 +30,13 @@ classifiers = [
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
+    "zensical",
+]
+benchmark = [
+    "beautifulsoup4>=4.12",
+    "lxml>=5.0",
+    "selectolax>=0.3",
+    "psutil>=5.9",
 ]
 
 [tool.setuptools.packages.find]
@@ -38,3 +45,8 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--tb=short"
+
+[dependency-groups]
+dev = [
+    "zensical>=0.0.2",
+]
