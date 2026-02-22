@@ -1,0 +1,375 @@
+/* =====================================================
+   HERO SECTION
+   ===================================================== */
+
+.mdx-hero {
+  background: linear-gradient(140deg, #1e1b4b 0%, #312e81 45%, #4338ca 100%);
+  padding: 5rem 1.6rem 6rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Subtle radial glow behind the code panel */
+.mdx-hero::after {
+  content: "";
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 55%;
+  height: 120%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.mdx-hero .md-grid {
+  position: relative;
+  z-index: 1;
+}
+
+/* — split layout — */
+.mdx-hero__inner {
+  display: grid;
+  grid-template-columns: 52% 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+/* — left: teaser — */
+.mdx-hero__teaser h1 {
+  font-size: 2.8rem !important;
+  font-weight: 800 !important;
+  line-height: 1.18 !important;
+  color: #fff !important;
+  margin: 0 0 1.25rem !important;
+  letter-spacing: -0.025em;
+}
+
+.mdx-hero__accent {
+  color: #a5b4fc; /* indigo-300 */
+}
+
+.mdx-hero__teaser > p:first-of-type {
+  font-size: 1.1rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0 0 2rem;
+  max-width: 34rem;
+}
+
+.mdx-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+/* primary button */
+.mdx-hero__cta .md-button--primary {
+  background-color: #6366f1 !important;
+  border-color: #6366f1 !important;
+  color: #fff !important;
+  font-weight: 600;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.15s;
+}
+.mdx-hero__cta .md-button--primary:hover {
+  background-color: #4f46e5 !important;
+  border-color: #4f46e5 !important;
+  transform: translateY(-1px);
+}
+
+/* ghost button */
+.mdx-hero__cta .md-button:not(.md-button--primary) {
+  border-color: rgba(165, 180, 252, 0.5) !important;
+  color: #e0e7ff !important;
+  font-weight: 600;
+  transition: border-color 0.2s, color 0.2s, transform 0.15s;
+}
+.mdx-hero__cta .md-button:not(.md-button--primary):hover {
+  border-color: #a5b4fc !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* badges */
+.mdx-hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  line-height: 1;
+}
+.mdx-hero__badges img {
+  height: 1.3rem;
+  vertical-align: middle;
+}
+
+/* — right: code window — */
+.mdx-hero__code {
+  border-radius: 0.8rem;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+.mdx-hero__code-header {
+  background: #1e293b;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.mdx-hero__code-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+
+.mdx-hero__code-filename {
+  margin-left: 0.6rem;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-family: var(--md-code-font-family, monospace);
+}
+
+.mdx-hero__pre {
+  margin: 0 !important;
+  padding: 1.4rem 1.5rem !important;
+  background: #0f172a !important;
+  border-radius: 0 !important;
+  font-size: 0.78rem !important;
+  line-height: 1.75 !important;
+  overflow-x: auto;
+}
+
+/* =====================================================
+   BENCHMARK SECTION
+   ===================================================== */
+
+.mdx-perf {
+  padding: 4rem 1.6rem 3rem;
+  background: var(--md-default-bg-color);
+}
+
+.mdx-perf > h2 {
+  text-align: center;
+  font-size: 1.85rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem !important;
+}
+
+.mdx-perf > p {
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 0 auto 2.5rem;
+  max-width: 38rem;
+}
+
+/* — stat chips — */
+.mdx-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin: 0 auto 3rem;
+  max-width: 52rem;
+}
+
+.mdx-stat {
+  flex: 1 1 10rem;
+  max-width: 16rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 1.5rem 1.25rem;
+  border-radius: 0.75rem;
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  text-align: center;
+}
+
+.mdx-stat__value {
+  font-size: 2.6rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #6366f1;
+  letter-spacing: -0.03em;
+}
+
+.mdx-stat__label {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--md-default-fg-color--light);
+}
+
+/* — bar chart — */
+.mdx-bars {
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.mdx-bars__title {
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--md-default-fg-color--light);
+  margin: 0 0 1.25rem !important;
+}
+
+.mdx-bar {
+  display: grid;
+  grid-template-columns: 9rem 1fr 5rem;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.mdx-bar__lib {
+  font-size: 0.8rem;
+  font-family: var(--md-code-font-family, monospace);
+  color: var(--md-default-fg-color--light);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.mdx-bar__lib--highlight {
+  color: #6366f1;
+  font-weight: 700;
+}
+
+.mdx-bar__track {
+  height: 1.5rem;
+  background: var(--md-default-fg-color--lightest);
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.mdx-bar__fill {
+  height: 100%;
+  border-radius: 0.25rem;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mdx-bar__fill--foxy      { background: #6366f1; }
+.mdx-bar__fill--lxml      { background: #10b981; }
+.mdx-bar__fill--selectolax { background: #06b6d4; }
+.mdx-bar__fill--bs4       { background: #f59e0b; opacity: 0.75; }
+
+.mdx-bar__value {
+  font-size: 0.8rem;
+  font-family: var(--md-code-font-family, monospace);
+  color: var(--md-default-fg-color--light);
+}
+
+.mdx-bar__value--highlight {
+  color: #6366f1;
+  font-weight: 700;
+}
+
+.mdx-bars__caption {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--md-default-fg-color--lighter);
+  margin: 1.25rem 0 0 !important;
+}
+
+.mdx-bars__caption a {
+  color: #6366f1;
+}
+
+/* =====================================================
+   FEATURE CARDS  (index.md content area)
+   ===================================================== */
+
+/* Card grid gap */
+.grid.cards {
+  grid-gap: 1rem !important;
+}
+
+/* Card base */
+.grid.cards > ul > li,
+.grid.cards > ol > li {
+  border-top: 3px solid #6366f1;
+  padding: 1.5rem 1.5rem 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Lift on hover */
+.grid.cards > ul > li:hover,
+.grid.cards > ol > li:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.12);
+}
+
+/* Icon color */
+.grid.cards .twemoji,
+.grid.cards .lg.middle {
+  color: #6366f1 !important;
+  fill: #6366f1 !important;
+}
+
+/* Tighten the hr separator gap */
+.grid.cards > ul > li hr,
+.grid.cards > ol > li hr {
+  margin: 0.6rem 0 0.85rem;
+  border-color: var(--md-default-fg-color--lightest);
+}
+
+/* Card title line */
+.grid.cards > ul > li > p:first-child,
+.grid.cards > ol > li > p:first-child {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+}
+
+/* Features title and subtitle */
+.mdx-features-title {
+  text-align: center;
+  margin: 4.5rem 0 0.75rem;
+  font-size: 1.9rem !important;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.mdx-features-subtitle {
+  text-align: center;
+  color: var(--md-default-fg-color--light);
+  margin: 0 auto 3rem;
+  max-width: 42rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media screen and (max-width: 76.25em) {
+  .mdx-hero__inner {
+    grid-template-columns: 1fr;
+  }
+  .mdx-hero__code {
+    display: none;
+  }
+  .mdx-hero__teaser h1 {
+    font-size: 2.2rem !important;
+  }
+}
+
+@media screen and (max-width: 59.9375em) {
+  .mdx-hero {
+    padding: 3rem 1rem 4.5rem;
+  }
+  .mdx-hero__teaser h1 {
+    font-size: 1.85rem !important;
+  }
+  .mdx-hero__teaser > p:first-of-type {
+    font-size: 1rem;
+  }
+}

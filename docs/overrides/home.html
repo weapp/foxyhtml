@@ -1,0 +1,67 @@
+{% extends "main.html" %}
+
+{% block tabs %}
+  {{ super() }}
+
+  <section class="mdx-hero">
+    <div class="md-grid md-typeset">
+      <div class="mdx-hero__inner">
+
+        <div class="mdx-hero__teaser">
+          <h1>
+            Parse HTML like jQuery.<br>
+            <span class="mdx-hero__accent">No overhead. No setup.</span>
+          </h1>
+          <p>
+            One <code>pip install</code>. No C extensions to compile, no build steps, no surprises.
+            Parses twice as fast as BeautifulSoup and uses half the memory — with a CSS
+            selector API you already know.
+          </p>
+          <nav class="mdx-hero__cta" aria-label="Quick start">
+            <a href="{{ 'getting-started/' | url }}" class="md-button md-button--primary">
+              Get started &rarr;
+            </a>
+            <a href="{{ 'api/foxyhtml/' | url }}" class="md-button">
+              Read the docs
+            </a>
+          </nav>
+          <p class="mdx-hero__badges">
+            <img src="https://img.shields.io/badge/python-3.8%2B-3776AB?logo=python&logoColor=white&style=flat-square" alt="Python 3.8+">
+            <img src="https://img.shields.io/badge/license-MIT-22c55e?style=flat-square" alt="MIT License">
+            <img src="https://img.shields.io/badge/dependencies-none-6366f1?style=flat-square" alt="No dependencies">
+            <img src="https://img.shields.io/badge/version-0.2.0-64748b?style=flat-square" alt="v0.2.0">
+          </p>
+        </div>
+
+        <div class="mdx-hero__code" aria-hidden="true">
+          <div class="mdx-hero__code-header">
+            <span class="mdx-hero__code-dot" style="background:#ff5f57"></span>
+            <span class="mdx-hero__code-dot" style="background:#febc2e"></span>
+            <span class="mdx-hero__code-dot" style="background:#28c840"></span>
+            <span class="mdx-hero__code-filename">scraper.py</span>
+          </div>
+          <pre class="mdx-hero__pre"><code class="language-python"><span style="color:#7c3aed">from</span> foxyhtml <span style="color:#7c3aed">import</span> <span style="color:#1e40af">FoxyHtml</span>
+
+doc <span style="color:#64748b">=</span> <span style="color:#1e40af">FoxyHtml</span>(<span style="color:#0891b2">open</span>(<span style="color:#16a34a">"page.html"</span>))
+
+<span style="color:#94a3b8"># Search by tag, class or id</span>
+items  <span style="color:#64748b">=</span> doc.<span style="color:#0891b2">search</span>(<span style="color:#16a34a">"li"</span>)
+active <span style="color:#64748b">=</span> doc.<span style="color:#0891b2">search</span>(<span style="color:#16a34a">"a"</span>, cls<span style="color:#64748b">=</span><span style="color:#16a34a">"active"</span>)
+nav    <span style="color:#64748b">=</span> doc.<span style="color:#0891b2">search</span>(id<span style="color:#64748b">=</span><span style="color:#16a34a">"main-nav"</span>)
+
+<span style="color:#94a3b8"># CSS selectors + pseudo-classes</span>
+first <span style="color:#64748b">=</span> doc.<span style="color:#0891b2">select</span>(<span style="color:#16a34a">"li:first"</span>)
+href  <span style="color:#64748b">=</span> doc.<span style="color:#0891b2">select</span>(<span style="color:#16a34a">"a#logo"</span>).<span style="color:#0891b2">attr</span>(<span style="color:#16a34a">"href"</span>)
+
+<span style="color:#94a3b8"># Structured data extraction</span>
+links <span style="color:#64748b">=</span> doc.<span style="color:#0891b2">foxycss</span>(<span style="color:#16a34a">"""
+nav
+    li
+        a@.attr('href')
+"""</span>)</code></pre>
+        </div>
+
+      </div>
+    </div>
+  </section>
+{% endblock %}
