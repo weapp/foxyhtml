@@ -21,9 +21,12 @@
   pointer-events: none;
 }
 
-.mdx-hero .md-grid {
+.mdx-hero__content {
   position: relative;
   z-index: 1;
+  max-width: 61rem;
+  margin: 0 auto;
+  padding: 0 0.8rem;
 }
 
 /* — split layout — */
