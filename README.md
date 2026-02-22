@@ -1,66 +1,101 @@
 FoxyHTML
 ========
 
-A HTML Parser written in Python
+A lightweight HTML parser with a jQuery-like API for Python 3.
 
-## Example
+## Installation
+
+```bash
+pip install foxyhtml
+```
+
+Or in editable mode from source:
+
+```bash
+pip install -e .
+```
+
+## Usage
 
 ```python
-import urllib2
-from pprint import pprint
-html = urllib2.urlopen("http://www.thetimes.co.uk").read()
+from foxyhtml import FoxyHtml
+
+html = """
+<html>
+  <body>
+    <ul class="menu">
+      <li>Item 1</li>
+      <li>Item 2</li>
+      <li>Item 3</li>
+    </ul>
+    <div id="main">
+      <p class="intro">Hello world</p>
+      <img src="photo.jpg" alt="A photo" />
+    </div>
+  </body>
+</html>
+"""
+
 parsed = FoxyHtml(html)
 
-print
-print "Example1"
-print "Way 1:"
-results = parsed.search(cls="nib-inner")
-for result in results:
-    pprint(
-        [result.joinedtexts() for result in result.search(tagname="li")])
+# Search by tag name
+items = parsed.search(tagname="li")
+for item in items:
+    print(item.joinedtexts())
 
-print
-print "Way 2:"
-pprint(
-    [result.joinedtexts() for result in parsed.foxycss(".nib-inner li")])
+# Search by CSS class
+intro = parsed.search(cls="intro")
+print(intro[0].joinedtexts())  # 'Hello world'
 
-print
-print "Example2"
-pprint([dict(zip(["title", "body"], fields))
-        for bricks in parsed.search(cls="brick-mpu")
-        for brick in bricks.search(cls="brick-sixth")
-        for fields in [brick.search(cls="f-hc").joinedtexts()]
-        if all(fields)
-        ])
+# Search by id
+main = parsed.search(id="main")
 
-print
-print "Example3"
-pprint([{
-        'title': titles[0],
-        'subtitile': titles[1],
-        'body': brick.search(tagname="p").joinedtexts()
-        }
-        for bricks in parsed.search(cls="brick-arts")
-        for brick in bricks.search(cls="brick-sixth")
-        for titles in brick.search(cls="f-hc").texts()
-        ])
+# CSS selector shorthand
+items = parsed.select("ul.menu li")
 
-print
-print "Example4"
-bricks = parsed.search(cls="brick-arts")
-pprint(bricks.search(tagname="img").attr("src"))
-print
+# Get attribute value
+imgs = parsed.search(tagname="img")
+print(imgs[0].attr("src"))  # 'photo.jpg'
 
-print
-print "Example5"
-brick = bricks.search(cls="brick-sixth")[0]
+# Rebuild HTML from nodes
+print(parsed.search(tagname="ul")[0].rebuild())
 
-print brick
-print
+# foxycss: indented selector rules
+results = parsed.foxycss("""
+.menu
+    li
+""")
 
-print brick.rebuild()
-print
+# Collect all text nodes
+texts = parsed.search(tagname="p")[0].texts()
+```
 
-print brick.clean().rebuild()
-print
+## API
+
+### `FoxyHtml(html)`
+
+Parses an HTML string (or bytes, or file-like object). Returns a list-like object of nodes.
+
+| Method | Description |
+|--------|-------------|
+| `search(tagname=None, id=None, cls=None)` | Flat search, returns `CollectionFoxyHtml` |
+| `isearch(...)` | Generator that yields `FoxyHtml` slices per matched element |
+| `select(css)` | CSS selector (tag, `.class`, `#id`, `:first`, `:last`, `:even`, `:odd`) |
+| `foxycss(css)` | Indented CSS rules with optional `@` transforms |
+| `rebuild()` | Reconstruct HTML string from nodes |
+| `texts()` | List of raw text content strings |
+| `joinedtexts()` | All text joined and whitespace-normalised |
+| `attr(name)` | Attribute value of the first node |
+| `clean(...)` | Strip tags to a safe subset |
+
+### `CollectionFoxyHtml`
+
+Returned by `search()`. Supports `attr()`, `texts()`, `joinedtexts()`, `search()`, `select()`.
+
+## foxycss `@` operator
+
+Apply Python string transforms to matched text:
+
+```python
+parsed.foxycss("li@.upper()")
 ```

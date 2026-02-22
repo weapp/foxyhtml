@@ -25,3 +25,23 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+CLAUDE.md
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Build artifacts
+__pycache__/
+*.py[cod]
+.eggs/
+
+# Package build
+dist/
+build/
+*.egg-info/
+
+# Pytest
+.pytest_cache/
