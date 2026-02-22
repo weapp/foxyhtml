@@ -381,3 +381,11 @@
     font-size: 1rem;
   }
 }
+
+
+.md-container, .md-main, .md-main__inner.md-grid, .md-content__inner.md-typeset {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+.md-content__inner.md-typeset::before { display: none; }
