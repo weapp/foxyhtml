@@ -7,6 +7,11 @@
   padding: 5rem 1.6rem 6rem;
   overflow: hidden;
   position: relative;
+
+  /* romper el contenedor de página para ocupar todo el ancho */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 /* Subtle radial glow behind the code panel */
