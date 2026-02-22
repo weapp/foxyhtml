@@ -70,6 +70,21 @@ results = parsed.foxycss("""
 texts = parsed.search(tagname="p")[0].texts()
 ```
 
+## Documentation
+
+The docs site is built with [Zensical](https://zensical.org).
+
+```bash
+# Install dev dependencies (includes zensical)
+pip install -e ".[dev]"
+
+# Local preview
+zensical serve
+
+# Build static site to ./site/
+zensical build
+```
+
 ## API
 
 ### `FoxyHtml(html)`
