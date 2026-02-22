@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Artículo de benchmark sobre parseo de HTML en Python">
+  <title>Parseo de HTML en Python: Guía Completa 2026</title>
+  <link rel="stylesheet" href="/static/main.css">
+  <link rel="canonical" href="https://example.com/guia-parseo-html">
+</head>
+<body>
+  <header id="site-header" class="header sticky">
+    <div class="container">
+      <a href="/" class="logo" id="logo">TechBlog</a>
+      <nav class="nav primary-nav" id="main-nav">
+        <ul class="nav-list">
+          <li class="nav-item active"><a href="/" class="nav-link">Inicio</a></li>
+          <li class="nav-item"><a href="/tutoriales" class="nav-link">Tutoriales</a></li>
+          <li class="nav-item"><a href="/herramientas" class="nav-link">Herramientas</a></li>
+          <li class="nav-item"><a href="/sobre-nosotros" class="nav-link">Sobre nosotros</a></li>
+          <li class="nav-item"><a href="/contacto" class="nav-link">Contacto</a></li>
+        </ul>
+      </nav>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">&#9776;</button>
+    </div>
+  </header>
+
+  <div class="layout container" id="page-layout">
+    <main class="main-content" id="main-content" role="main">
+      <article class="article post" id="post-42" itemscope itemtype="https://schema.org/Article">
+        <header class="article-header">
+          <div class="breadcrumb" aria-label="Ruta de navegación">
+            <a href="/" class="breadcrumb-link">Inicio</a>
+            <span class="breadcrumb-sep">/</span>
+            <a href="/tutoriales" class="breadcrumb-link">Tutoriales</a>
+            <span class="breadcrumb-sep">/</span>
+            <span class="breadcrumb-current">Parseo HTML</span>
+          </div>
+          <h1 class="article-title" itemprop="headline">Parseo de HTML en Python: Guía Completa 2026</h1>
+          <div class="article-meta">
+            <span class="author" itemprop="author">
+              <img src="/avatars/manu.jpg" alt="Manu" class="avatar avatar-small">
+              <a href="/autores/manu" class="author-link">Manu García</a>
+            </span>
+            <time class="date" datetime="2026-02-22" itemprop="datePublished">22 de febrero de 2026</time>
+            <span class="reading-time">10 min de lectura</span>
+            <span class="category">
+              <a href="/categoria/python" class="category-link tag">Python</a>
+              <a href="/categoria/html" class="category-link tag">HTML</a>
+              <a href="/categoria/scraping" class="category-link tag">Web Scraping</a>
+            </span>
+          </div>
+        </header>
+
+        <div class="article-body" itemprop="articleBody">
+          <p class="lead">El parseo de HTML es una tarea fundamental en el desarrollo web y el web scraping. En Python existen múltiples librerías con diferentes enfoques, velocidades y APIs. Esta guía compara las principales opciones disponibles en 2026.</p>
+
+          <nav class="toc" id="table-of-contents" aria-label="Tabla de contenidos">
+            <h2 class="toc-title">Contenidos</h2>
+            <ol class="toc-list">
+              <li class="toc-item"><a href="#introduccion" class="toc-link">Introducción</a></li>
+              <li class="toc-item"><a href="#beautifulsoup" class="toc-link">BeautifulSoup 4</a></li>
+              <li class="toc-item"><a href="#lxml" class="toc-link">lxml</a></li>
+              <li class="toc-item"><a href="#selectolax" class="toc-link">Selectolax</a></li>
+              <li class="toc-item"><a href="#foxyhtml" class="toc-link">FoxyHTML</a></li>
+              <li class="toc-item"><a href="#comparativa" class="toc-link">Comparativa</a></li>
+              <li class="toc-item"><a href="#conclusion" class="toc-link">Conclusión</a></li>
+            </ol>
+          </nav>
+
+          <section class="section" id="introduccion">
+            <h2 class="section-title">Introducción</h2>
+            <p class="paragraph">Cuando necesitamos extraer información de páginas web o manipular HTML programáticamente, elegir la librería correcta puede marcar una gran diferencia en rendimiento y facilidad de uso. Cada librería tiene sus propias fortalezas: algunas priorizan la velocidad, otras la especificidad o la facilidad de uso.</p>
+            <p class="paragraph">En este artículo analizaremos cuatro de las opciones más populares en el ecosistema Python, comparando su velocidad, API y casos de uso ideales. Veremos ejemplos prácticos de cada una y mediremos su rendimiento con benchmarks reales.</p>
+            <div class="callout info" id="callout-requirements">
+              <span class="callout-icon">ℹ️</span>
+              <div class="callout-content">
+                <strong class="callout-title">Requisitos</strong>
+                <p class="callout-text">Para seguir esta guía necesitas Python 3.8+ y pip. Los benchmarks se han ejecutado en un Mac M2 con Python 3.14.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="beautifulsoup">
+            <h2 class="section-title">BeautifulSoup 4</h2>
+            <p class="paragraph">BeautifulSoup es probablemente la librería de parseo HTML más popular en Python. Su punto fuerte es la facilidad de uso y la capacidad de trabajar con HTML "roto" o malformado.</p>
+            <h3 class="subsection-title">Instalación</h3>
+            <pre class="code-block"><code class="language-bash">pip install beautifulsoup4 lxml</code></pre>
+            <h3 class="subsection-title">Uso básico</h3>
+            <pre class="code-block"><code class="language-python">from bs4 import BeautifulSoup
+
+html = "&lt;html&gt;&lt;body&gt;&lt;p class='intro'&gt;Hola mundo&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;"
+soup = BeautifulSoup(html, 'lxml')
+
+# Buscar por tag
+paragraphs = soup.find_all('p')
+
+# Buscar por clase
+intro = soup.find(class_='intro')
+
+# Extraer texto
+text = intro.get_text()</code></pre>
+            <div class="pros-cons" id="bs4-pros-cons">
+              <div class="pros">
+                <h4 class="pros-title">Ventajas</h4>
+                <ul class="feature-list">
+                  <li class="feature-item">API muy intuitiva y bien documentada</li>
+                  <li class="feature-item">Soporte para múltiples parsers (html.parser, lxml, html5lib)</li>
+                  <li class="feature-item">Manejo robusto de HTML malformado</li>
+                  <li class="feature-item">Gran comunidad y muchos recursos</li>
+                </ul>
+              </div>
+              <div class="cons">
+                <h4 class="cons-title">Desventajas</h4>
+                <ul class="feature-list">
+                  <li class="feature-item">Más lenta que lxml o selectolax</li>
+                  <li class="feature-item">Mayor consumo de memoria</li>
+                  <li class="feature-item">Requiere dependencia externa</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="lxml">
+            <h2 class="section-title">lxml</h2>
+            <p class="paragraph">lxml es una librería C que proporciona bindings Python para libxml2 y libxslt. Es significativamente más rápida que las alternativas puras de Python y soporta XPath y XSLT.</p>
+            <h3 class="subsection-title">Instalación</h3>
+            <pre class="code-block"><code class="language-bash">pip install lxml</code></pre>
+            <h3 class="subsection-title">Uso básico</h3>
+            <pre class="code-block"><code class="language-python">from lxml import html
+
+tree = html.fromstring(content)
+
+# XPath
+paragraphs = tree.xpath('//p')
+
+# CSS selectors
+items = tree.cssselect('.item')
+
+# Texto
+text = tree.text_content()</code></pre>
+            <div class="pros-cons" id="lxml-pros-cons">
+              <div class="pros">
+                <h4 class="pros-title">Ventajas</h4>
+                <ul class="feature-list">
+                  <li class="feature-item">Muy alta velocidad (extensión C)</li>
+                  <li class="feature-item">Soporte completo de XPath 1.0</li>
+                  <li class="feature-item">Excelente para documentos XML</li>
+                  <li class="feature-item">API ETtree estándar</li>
+                </ul>
+              </div>
+              <div class="cons">
+                <h4 class="cons-title">Desventajas</h4>
+                <ul class="feature-list">
+                  <li class="feature-item">API más verbosa y menos intuitiva</li>
+                  <li class="feature-item">Compilación puede fallar en algunos entornos</li>
+                  <li class="feature-item">Curva de aprendizaje mayor</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="selectolax">
+            <h2 class="section-title">Selectolax</h2>
+            <p class="paragraph">Selectolax es una librería moderna y extremadamente rápida basada en los parsers Modest y Lexbor escritos en C. Su API está diseñada para ser simple y enfocada en selectores CSS.</p>
+            <h3 class="subsection-title">Instalación</h3>
+            <pre class="code-block"><code class="language-bash">pip install selectolax</code></pre>
+            <h3 class="subsection-title">Uso básico</h3>
+            <pre class="code-block"><code class="language-python">from selectolax.parser import HTMLParser
+
+tree = HTMLParser(content)
+
+# CSS selectors
+items = tree.css('.item')
+
+# Texto
+for node in items:
+    print(node.text())</code></pre>
+            <div class="pros-cons" id="selectolax-pros-cons">
+              <div class="pros">
+                <h4 class="pros-title">Ventajas</h4>
+                <ul class="feature-list">
+                  <li class="feature-item">Velocidad extrema (C nativo)</li>
+                  <li class="feature-item">Muy bajo consumo de memoria</li>
+                  <li class="feature-item">API limpia y moderna</li>
+                </ul>
+              </div>
+              <div class="cons">
+                <h4 class="cons-title">Desventajas</h4>
+                <ul class="feature-list">
+                  <li class="feature-item">API más limitada que BeautifulSoup</li>
+                  <li class="feature-item">Sin soporte XPath</li>
+                  <li class="feature-item">Comunidad más pequeña</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="foxyhtml">
+            <h2 class="section-title">FoxyHTML</h2>
+            <p class="paragraph">FoxyHTML es un parser HTML ligero con una API jQuery-like implementada en Python puro. Sin dependencias externas, ideal para entornos con restricciones de instalación.</p>
+            <h3 class="subsection-title">Instalación</h3>
+            <pre class="code-block"><code class="language-bash">pip install foxyhtml</code></pre>
+            <h3 class="subsection-title">Uso básico</h3>
+            <pre class="code-block"><code class="language-python">from foxyhtml import FoxyHtml
+
+doc = FoxyHtml(content)
+
+# Buscar por tag
+items = doc.search('li')
+
+# Buscar por clase
+featured = doc.select('.featured')
+
+# Extraer texto
+texts = items.texts()</code></pre>
+          </section>
+
+          <section class="section" id="comparativa">
+            <h2 class="section-title">Comparativa de rendimiento</h2>
+            <p class="paragraph">Los siguientes benchmarks miden el tiempo en milisegundos para operaciones comunes sobre documentos HTML de distintos tamaños. Menor es mejor.</p>
+            <div class="table-wrapper" id="benchmark-table-wrapper">
+              <table class="table benchmark-table" id="benchmark-results">
+                <thead class="table-head">
+                  <tr class="table-row header-row">
+                    <th class="table-cell th" scope="col">Librería</th>
+                    <th class="table-cell th" scope="col">Parse (ms)</th>
+                    <th class="table-cell th" scope="col">Find tag (ms)</th>
+                    <th class="table-cell th" scope="col">Find class (ms)</th>
+                    <th class="table-cell th" scope="col">Find ID (ms)</th>
+                    <th class="table-cell th" scope="col">Texto (ms)</th>
+                  </tr>
+                </thead>
+                <tbody class="table-body">
+                  <tr class="table-row">
+                    <td class="table-cell" data-label="Librería">foxyhtml</td>
+                    <td class="table-cell" data-label="Parse">—</td>
+                    <td class="table-cell" data-label="Find tag">—</td>
+                    <td class="table-cell" data-label="Find class">—</td>
+                    <td class="table-cell" data-label="Find ID">—</td>
+                    <td class="table-cell" data-label="Texto">—</td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="table-cell" data-label="Librería">bs4 + html.parser</td>
+                    <td class="table-cell" data-label="Parse">—</td>
+                    <td class="table-cell" data-label="Find tag">—</td>
+                    <td class="table-cell" data-label="Find class">—</td>
+                    <td class="table-cell" data-label="Find ID">—</td>
+                    <td class="table-cell" data-label="Texto">—</td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="table-cell" data-label="Librería">bs4 + lxml</td>
+                    <td class="table-cell" data-label="Parse">—</td>
+                    <td class="table-cell" data-label="Find tag">—</td>
+                    <td class="table-cell" data-label="Find class">—</td>
+                    <td class="table-cell" data-label="Find ID">—</td>
+                    <td class="table-cell" data-label="Texto">—</td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="table-cell" data-label="Librería">lxml.html</td>
+                    <td class="table-cell" data-label="Parse">—</td>
+                    <td class="table-cell" data-label="Find tag">—</td>
+                    <td class="table-cell" data-label="Find class">—</td>
+                    <td class="table-cell" data-label="Find ID">—</td>
+                    <td class="table-cell" data-label="Texto">—</td>
+                  </tr>
+                  <tr class="table-row">
+                    <td class="table-cell" data-label="Librería">selectolax</td>
+                    <td class="table-cell" data-label="Parse">—</td>
+                    <td class="table-cell" data-label="Find tag">—</td>
+                    <td class="table-cell" data-label="Find class">—</td>
+                    <td class="table-cell" data-label="Find ID">—</td>
+                    <td class="table-cell" data-label="Texto">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="caption">Tabla generada con <code>python benchmarks/bench.py</code>. Ejecuta el script para ver los resultados reales en tu máquina.</p>
+          </section>
+
+          <section class="section" id="conclusion">
+            <h2 class="section-title">Conclusión</h2>
+            <p class="paragraph">Cada librería tiene su nicho:</p>
+            <ul class="list verdict-list">
+              <li class="list-item verdict-item"><strong>BeautifulSoup</strong>: ideal para proyectos donde la legibilidad y facilidad de uso son prioritarias, o cuando el HTML está muy malformado.</li>
+              <li class="list-item verdict-item"><strong>lxml</strong>: la mejor opción cuando el rendimiento es crítico y necesitas XPath o XSLT.</li>
+              <li class="list-item verdict-item"><strong>Selectolax</strong>: máxima velocidad con API moderna, perfecto para scraping a gran escala.</li>
+              <li class="list-item verdict-item"><strong>FoxyHTML</strong>: sin dependencias externas, API jQuery-like, ideal para proyectos con restricciones de entorno o cuando quieres una API expresiva y simple.</li>
+            </ul>
+          </section>
+        </div>
+
+        <footer class="article-footer">
+          <div class="tags" id="article-tags">
+            <span class="tags-label">Etiquetas:</span>
+            <a href="/tags/python" class="tag">python</a>
+            <a href="/tags/html" class="tag">html</a>
+            <a href="/tags/parsing" class="tag">parsing</a>
+            <a href="/tags/scraping" class="tag">scraping</a>
+            <a href="/tags/benchmark" class="tag">benchmark</a>
+          </div>
+          <div class="share" id="share-buttons">
+            <span class="share-label">Compartir:</span>
+            <a href="#" class="share-btn share-twitter" rel="noopener">Twitter</a>
+            <a href="#" class="share-btn share-linkedin" rel="noopener">LinkedIn</a>
+            <a href="#" class="share-btn share-hackernews" rel="noopener">Hacker News</a>
+          </div>
+          <div class="author-bio" id="author-bio">
+            <img src="/avatars/manu.jpg" alt="Manu" class="avatar avatar-large">
+            <div class="author-info">
+              <h3 class="author-name">Manu García</h3>
+              <p class="author-description">Desarrollador Python apasionado por el parsing, el web scraping y el rendimiento. Mantenedor de FoxyHTML.</p>
+              <a href="/autores/manu" class="author-link button">Ver todos los artículos</a>
+            </div>
+          </div>
+        </footer>
+      </article>
+
+      <section class="related-posts" id="related-posts">
+        <h2 class="section-title">Artículos relacionados</h2>
+        <div class="posts-grid">
+          <article class="post-card" id="related-1">
+            <img src="/images/scraping.jpg" alt="Web Scraping" class="post-card-image">
+            <div class="post-card-body">
+              <span class="tag">Scraping</span>
+              <h3 class="post-card-title"><a href="/scraping-etico" class="post-link">Scraping ético con Python</a></h3>
+              <p class="post-card-excerpt">Cómo hacer web scraping respetando robots.txt y las condiciones de servicio.</p>
+            </div>
+          </article>
+          <article class="post-card" id="related-2">
+            <img src="/images/xpath.jpg" alt="XPath" class="post-card-image">
+            <div class="post-card-body">
+              <span class="tag">XPath</span>
+              <h3 class="post-card-title"><a href="/xpath-python" class="post-link">XPath con Python: Tutorial completo</a></h3>
+              <p class="post-card-excerpt">Guía exhaustiva de XPath 1.0 con ejemplos prácticos usando lxml.</p>
+            </div>
+          </article>
+          <article class="post-card" id="related-3">
+            <img src="/images/css.jpg" alt="CSS Selectors" class="post-card-image">
+            <div class="post-card-body">
+              <span class="tag">CSS</span>
+              <h3 class="post-card-title"><a href="/css-selectors-python" class="post-link">Selectores CSS en Python</a></h3>
+              <p class="post-card-excerpt">Cómo usar selectores CSS para navegar el DOM con Python.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="comments" id="comments">
+        <h2 class="section-title">Comentarios (12)</h2>
+        <div class="comment-list" id="comment-list">
+          <div class="comment" id="comment-1">
+            <img src="/avatars/user1.jpg" alt="Ana" class="avatar">
+            <div class="comment-body">
+              <div class="comment-meta">
+                <span class="comment-author">Ana López</span>
+                <time class="comment-date" datetime="2026-02-22T10:30:00">22 Feb 2026, 10:30</time>
+              </div>
+              <p class="comment-text">Excelente artículo. Usaba BeautifulSoup por costumbre pero voy a probar selectolax para mi scraper de precios.</p>
+              <button class="comment-reply btn-ghost" data-comment="1">Responder</button>
+            </div>
+          </div>
+          <div class="comment" id="comment-2">
+            <img src="/avatars/user2.jpg" alt="Pedro" class="avatar">
+            <div class="comment-body">
+              <div class="comment-meta">
+                <span class="comment-author">Pedro Ruiz</span>
+                <time class="comment-date" datetime="2026-02-22T11:15:00">22 Feb 2026, 11:15</time>
+              </div>
+              <p class="comment-text">¿Has probado html5lib? Sé que es lento pero me interesa ver la diferencia con html.parser de bs4.</p>
+              <button class="comment-reply btn-ghost" data-comment="2">Responder</button>
+            </div>
+          </div>
+          <div class="comment comment-reply-to" id="comment-3">
+            <img src="/avatars/manu.jpg" alt="Manu" class="avatar">
+            <div class="comment-body">
+              <div class="comment-meta">
+                <span class="comment-author">Manu García</span>
+                <span class="comment-badge author-badge">Autor</span>
+                <time class="comment-date" datetime="2026-02-22T12:00:00">22 Feb 2026, 12:00</time>
+              </div>
+              <p class="comment-text">@Pedro html5lib es entre 10x y 50x más lenta que las demás, así que la omití para que la tabla fuera legible. Pero puedes añadirla fácilmente al script de benchmarks.</p>
+              <button class="comment-reply btn-ghost" data-comment="3">Responder</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="sidebar" id="sidebar" role="complementary">
+      <div class="widget" id="widget-search">
+        <h3 class="widget-title">Buscar</h3>
+        <form class="search-form" action="/buscar" method="get">
+          <input type="search" name="q" class="search-input" placeholder="Buscar artículos...">
+          <button type="submit" class="search-btn btn">Buscar</button>
+        </form>
+      </div>
+      <div class="widget" id="widget-popular">
+        <h3 class="widget-title">Artículos populares</h3>
+        <ul class="widget-list">
+          <li class="widget-item"><a href="/asyncio-python" class="widget-link">asyncio en Python</a></li>
+          <li class="widget-item"><a href="/dataclasses" class="widget-link">dataclasses vs namedtuple</a></li>
+          <li class="widget-item"><a href="/type-hints" class="widget-link">Type hints avanzados</a></li>
+          <li class="widget-item"><a href="/generators" class="widget-link">Generadores y coroutines</a></li>
+          <li class="widget-item"><a href="/packaging" class="widget-link">Empaquetar librerías Python</a></li>
+        </ul>
+      </div>
+      <div class="widget" id="widget-tags">
+        <h3 class="widget-title">Tags</h3>
+        <div class="tag-cloud">
+          <a href="/tags/python" class="tag tag-large">python</a>
+          <a href="/tags/html" class="tag">html</a>
+          <a href="/tags/css" class="tag tag-small">css</a>
+          <a href="/tags/scraping" class="tag tag-medium">scraping</a>
+          <a href="/tags/async" class="tag">async</a>
+          <a href="/tags/testing" class="tag tag-small">testing</a>
+          <a href="/tags/packaging" class="tag">packaging</a>
+          <a href="/tags/cli" class="tag tag-small">cli</a>
+        </div>
+      </div>
+      <div class="widget newsletter-widget" id="widget-newsletter">
+        <h3 class="widget-title">Newsletter</h3>
+        <p class="widget-text">Recibe los mejores artículos de Python cada semana.</p>
+        <form class="newsletter-form" action="/newsletter" method="post">
+          <input type="email" name="email" class="email-input" placeholder="tu@email.com" required>
+          <button type="submit" class="subscribe-btn btn btn-primary">Suscribirse</button>
+        </form>
+      </div>
+    </aside>
+  </div>
+
+  <footer class="site-footer" id="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col" id="footer-about">
+          <h4 class="footer-title">TechBlog</h4>
+          <p class="footer-text">Blog técnico sobre Python, desarrollo web y buenas prácticas de programación.</p>
+        </div>
+        <div class="footer-col" id="footer-links">
+          <h4 class="footer-title">Enlaces</h4>
+          <ul class="footer-list">
+            <li class="footer-item"><a href="/sobre-nosotros" class="footer-link">Sobre nosotros</a></li>
+            <li class="footer-item"><a href="/contacto" class="footer-link">Contacto</a></li>
+            <li class="footer-item"><a href="/privacidad" class="footer-link">Política de privacidad</a></li>
+            <li class="footer-item"><a href="/rss.xml" class="footer-link">RSS</a></li>
+          </ul>
+        </div>
+        <div class="footer-col" id="footer-social">
+          <h4 class="footer-title">Redes sociales</h4>
+          <ul class="footer-list social-list">
+            <li class="footer-item social-item"><a href="https://github.com/techblog" class="footer-link social-link" rel="noopener">GitHub</a></li>
+            <li class="footer-item social-item"><a href="https://twitter.com/techblog" class="footer-link social-link" rel="noopener">Twitter</a></li>
+            <li class="footer-item social-item"><a href="https://linkedin.com/company/techblog" class="footer-link social-link" rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="copyright">&copy; 2026 TechBlog. Todos los derechos reservados.</p>
+        <p class="built-with">Construido con <a href="https://mkdocs.org" class="footer-link">MkDocs</a> y mucho café.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
