@@ -26,7 +26,7 @@ class CssSelector:
                     kws["id"] = arg[2]
                 elif arg[3]:
                     modif.append(arg[3])
-                self.parsed.append((kws, modif))
+            self.parsed.append((kws, modif))
 
     def __str__(self):
         return str(self.parsed)

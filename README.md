@@ -94,8 +94,12 @@ Returned by `search()`. Supports `attr()`, `texts()`, `joinedtexts()`, `search()
 
 ## foxycss `@` operator
 
-Apply Python string transforms to matched text:
+Apply Python transformations to matched results. The `@` is followed by a method call on the matched collection:
 
 ```python
-parsed.foxycss("li@.upper()")
+# Extract joined text from each matched element
+parsed.foxycss("li@.joinedtexts()")  # ["Item 1", "Item 2", "Item 3"]
+
+# Rebuild HTML of each matched element
+parsed.foxycss("li@.rebuild()")
 ```
