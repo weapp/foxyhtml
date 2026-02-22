@@ -1,0 +1,48 @@
+[project]
+site_name = "FoxyHTML"
+site_description = "A lightweight HTML parser with a jQuery-like API for Python 3"
+site_url = "https://weapp.github.io/foxyhtml/"
+repo_url = "https://github.com/weapp/foxyhtml"
+repo_name = "weapp/foxyhtml"
+
+nav = [
+  { "Home" = "index.md" },
+  { "Getting Started" = "getting-started.md" },
+  { "API Reference" = [
+    { "FoxyHtml" = "api/foxyhtml.md" },
+    { "Selectors" = "api/selectors.md" },
+    { "Node" = "api/node.md" },
+  ]},
+  { "Guides" = [
+    { "Searching" = "guides/searching.md" },
+    { "CSS Selectors" = "guides/css-selectors.md" },
+    { "FoxyCss" = "guides/foxycss.md" },
+    { "HTML Sanitization" = "guides/clean.md" },
+  ]},
+  { "Benchmarks" = "benchmarks.md" },
+]
+
+extra_css = ["stylesheets/extra.css"]
+
+[project.theme]
+features = [
+  "content.code.copy",
+  "content.code.annotate",
+  "navigation.instant",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.path",
+  "search.highlight",
+]
+
+[[project.theme.palette]]
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
